@@ -27,43 +27,55 @@
         margin: 0;
         display: flex;
         min-height: 100vh;
-        perspective: 1200px;
+        perspective: 2000px; /* Increased perspective for better 3D */
         font: 1em/1.4 var(--font-body);
         overflow: hidden;
         color: var(--color-black);
-        /* Applying the pink grid background */
         background-color: var(--color-pink-bg);
         background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.8) 25%, rgba(255, 255, 255, 0.8) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.8) 75%, rgba(255, 255, 255, 0.8) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.8) 25%, rgba(255, 255, 255, 0.8) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.8) 75%, rgba(255, 255, 255, 0.8) 76%, transparent 77%, transparent);
         background-size: 80px 80px;
       }
 
-      /* ===== Book Styling ===== */
+      /* ===== Book Styling (Resized and more 3D) ===== */
       .book {
         position: relative;
         display: flex;
         margin: auto;
-        width: clamp(300px, 45cqmin, 500px); /* Responsive width */
+        width: 40vmin; /* Adjusted size for a more compact look */
+        aspect-ratio: 2 / 2.8; /* Perfect book aspect ratio */
         pointer-events: none;
         transform-style: preserve-3d;
-        transition: translate 1s;
+        transition: translate 1s, rotate 1s;
         translate: calc(min(var(--c), 1) * 50%) 0%;
-        rotate: 1 0 0 30deg;
+        rotate: 1 0 0 35deg; /* Increased rotation for more 3D effect */
+      }
+
+      /* ===== NEW: Book Spine ===== */
+      .book::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        transform: translateZ(calc(var(--thickness) * -0.25vmin));
+        background: #555;
+        border-radius: 0.25vmin;
+        box-shadow: 0 0.5vmin 2vmin rgba(0,0,0,0.3);
       }
 
       .page {
-        --thickness: 4;
+        --thickness: 6; /* Increased thickness for more depth */
         flex: none;
         display: flex;
         width: 100%;
-        font-size: clamp(14px, 2.2cqmin, 20px);
+        font-size: clamp(14px, 1.5vmin, 20px);
         pointer-events: all;
         user-select: none;
         transform-style: preserve-3d;
         transform-origin: left center;
-        transition: transform 1s,
-          rotate 1s ease-in calc((min(var(--i), var(--c)) - max(var(--i), var(--c))) * 50ms);
+        /* NEW: Realistic page turn timing */
+        transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1),
+          rotate 1.2s cubic-bezier(0.65, 0, 0.35, 1);
         translate: calc(var(--i) * -100%) 0px 0px;
-        transform: translateZ(calc((var(--c) - var(--i) - 0.5) * calc(var(--thickness) * 0.23cqmin)));
+        transform: translateZ(calc((var(--c) - var(--i) - 0.5) * calc(var(--thickness) * 0.23vmin)));
         rotate: 0 1 0 calc(clamp(0, var(--c) - var(--i), 1) * -180deg);
         box-shadow: 0em 0.5em 1.5em -0.2em rgba(0,0,0,0.3);
       }
@@ -79,13 +91,25 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 2.5em;
+        padding: 2em;
         text-align: center;
       }
 
       .back {
         translate: -100% 0;
         rotate: 0 1 0 180deg;
+      }
+      
+      /* ===== NEW: Curved Page Shadow Effect ===== */
+      .page::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to left, rgba(0,0,0,0.15) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.15) 100%);
+        opacity: clamp(0, (var(--c) - var(--i) - 0.2) * 2, 1) * clamp(0, (var(--i) + 1.2 - var(--c)) * 2, 1);
+        transition: opacity 0.6s;
+        z-index: 10;
+        pointer-events: none;
       }
       
       /* Page Numbering */
@@ -104,20 +128,14 @@
       .cover::after { content: ""; }
       
       /* Page Backgrounds */
-      .front {
-        background: linear-gradient(to left, #f7f7f7 80%, #eee 100%);
-        border-radius: 0.1em 0.5em 0.5em 0.1em;
-      }
-      .back {
-        background-image: linear-gradient(to right, #f7f7f7 80%, #eee 100%);
-        border-radius: 0.5em 0.1em 0.1em 0.5em;
-      }
+      .front { border-radius: 0.1em 0.5em 0.5em 0.1em; }
+      .back { border-radius: 0.5em 0.1em 0.1em 0.5em; }
       
       /* Image Pages */
       .front:has(img), .back:has(img) { padding: 0; }
       .front img, .back img { width: 100%; height: 100%; object-fit: cover; }
 
-      /* ===== Cover Design ===== */
+      /* Cover Design */
       .cover {
         background: linear-gradient(135deg, var(--color-heart), var(--color-text-pink));
         color: var(--color-white);
@@ -141,7 +159,6 @@
         color: var(--color-text-pink);
         margin-bottom: 0.5em;
       }
-
       p {
         font-family: var(--font-handwriting);
         font-size: 1.8em;
@@ -177,7 +194,7 @@
     <div class="floating-hearts"></div>
 
     <div class="book">
-      <div class="page">
+      <div class="page" style="--i: 0;">
         <div class="front cover">
           <h1>Happy Birthday!</h1>
           <p>A Special Book Just For You ❤️</p>
@@ -187,7 +204,7 @@
         </div>
       </div>
       
-      <div class="page">
+      <div class="page" style="--i: 1;">
         <div class="front">
           <h2>To The Birthday Girl ✨</h2>
           <p>This book is a small collection of all the wonderful things that make you so special. I hope it makes your day even brighter!</p>
@@ -198,7 +215,7 @@
         </div>
       </div>
       
-      <div class="page">
+      <div class="page" style="--i: 2;">
         <div class="front">
           <h2>You're So Beautiful 💖</h2>
           <p>Honestly, you have a beauty that shines from the inside out. It's in your smile, your eyes, and the kindness you show to everyone.</p>
@@ -209,7 +226,7 @@
         </div>
       </div>
       
-      <div class="page">
+      <div class="page" style="--i: 3;">
         <div class="front">
           <img src="./4.png" alt="A beautiful memory" />
         </div>
@@ -220,7 +237,7 @@
         </div>
       </div>
 
-      <div class="page">
+      <div class="page" style="--i: 4;">
         <div class="front">
           <h2>A Wish For You...</h2>
           <p>For your birthday, I wish you endless happiness, new adventures, and success in everything you do.</p>
@@ -232,7 +249,7 @@
         </div>
       </div>
 
-      <div class="page">
+      <div class="page" style="--i: 5;">
         <div class="front">
             <img src="./6.jpg" alt="A beautiful memory" />
         </div>
@@ -243,7 +260,7 @@
         </div>
       </div>
       
-      <div class="page">
+      <div class="page" style="--i: 6;">
         <div class="front">
           <img src="./7.png" alt="A beautiful memory" />
         </div>
@@ -255,11 +272,10 @@
     </div>
 
     <script>
-      // Function to initialize the flipbook
       const flipBook = (elBook) => {
-        elBook.style.setProperty("--c", 0); // Set current page to 0 (cover)
+        elBook.style.setProperty("--c", 0); 
+        
         elBook.querySelectorAll(".page").forEach((page, idx) => {
-          page.style.setProperty("--i", idx);
           page.addEventListener("click", (evt) => {
             if (evt.target.closest("a")) return;
             const curr = evt.target.closest(".back") ? idx : idx + 1;
@@ -268,10 +284,8 @@
         });
       };
       
-      // Initialize all books on the page
       document.querySelectorAll(".book").forEach(flipBook);
 
-      // --- Generate Floating Hearts ---
       const createFloatingHearts = (container, count) => {
           for (let i = 0; i < count; i++) {
               const heart = document.createElement('i');
