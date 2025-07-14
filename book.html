@@ -3,462 +3,287 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Book by Shobhit Dev</title>
-     <style>
-      * {
-  box-sizing: border-box;
-}
+    <title>A Book For Your Birthday ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zeyada&family=Sriracha&family=Titan+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      /* ===== CSS Variables for Theme ===== */
+      :root {
+          --color-pink-bg: #feecea;
+          --color-white: #fff;
+          --color-off-white: #fffafc;
+          --color-black: #333;
+          --color-text-pink: #ff7882;
+          --color-heart: #f43d67;
+          --font-title: 'Titan One', sans-serif;
+          --font-heading: 'Sriracha', sans-serif;
+          --font-handwriting: 'Zeyada', cursive;
+      }
 
-body {
-  margin: 0;
-  display: flex;
-  min-height: 100dvh;
-  perspective: 1000px;
-  font: 1em/1.4 "Poppins", sans-serif;
-  overflow: hidden;
-  color: hsl(180 68% 5%);
-  background-image: radial-gradient(
-      circle farthest-corner at 50% 50%,
-      hsl(187 20% 88%) 30%,
-      hsl(149 20% 94%) 100%
-  );
-}
+      /* ===== Global Styles ===== */
+      * { box-sizing: border-box; }
 
-.book {
-  position: relative;
-  display: flex;
-  margin: auto;
-  width: 42cqmin; /* Increased width */
-  pointer-events: none;
-  transform-style: preserve-3d;
-  transition: translate 1s;
-  translate: calc(min(var(--c), 1) * 50%) 0%;
-  rotate: 1 0 0 30deg;
-}
+      body {
+        margin: 0;
+        display: flex;
+        min-height: 100vh;
+        perspective: 1200px;
+        font: 1em/1.4 var(--font-body);
+        overflow: hidden;
+        color: var(--color-black);
+        /* Applying the pink grid background */
+        background-color: var(--color-pink-bg);
+        background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.8) 25%, rgba(255, 255, 255, 0.8) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.8) 75%, rgba(255, 255, 255, 0.8) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.8) 25%, rgba(255, 255, 255, 0.8) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.8) 75%, rgba(255, 255, 255, 0.8) 76%, transparent 77%, transparent);
+        background-size: 80px 80px;
+      }
 
-.page {
-  --thickness: 4;
-  flex: none;
-  display: flex;
-  width: 100%;
-  font-size: 2.2cqmin; /* Slightly increased font size */
-  pointer-events: all;
-  user-select: none;
-  transform-style: preserve-3d;
-  transform-origin: left center;
-  transition: transform 1s,
-      rotate 1s ease-in calc((min(var(--i), var(--c)) - max(var(--i), var(--c))) * 50ms);
-  translate: calc(var(--i) * -100%) 0px 0px;
-  transform: translateZ(calc((var(--c) - var(--i) - 0.5) * calc(var(--thickness) * 0.23cqmin)));
-  rotate: 0 1 0 calc(clamp(0, var(--c) - var(--i), 1) * -180deg);
-}
+      /* ===== Book Styling ===== */
+      .book {
+        position: relative;
+        display: flex;
+        margin: auto;
+        width: clamp(300px, 45cqmin, 500px); /* Responsive width */
+        pointer-events: none;
+        transform-style: preserve-3d;
+        transition: translate 1s;
+        translate: calc(min(var(--c), 1) * 50%) 0%;
+        rotate: 1 0 0 30deg;
+      }
 
-.front,
-.back {
-  position: relative;
-  flex: none;
-  width: 100%;
-  backface-visibility: hidden;
-  overflow: hidden;
-  background-color: #fff;
-  translate: 0px;
-}
+      .page {
+        --thickness: 4;
+        flex: none;
+        display: flex;
+        width: 100%;
+        font-size: clamp(14px, 2.2cqmin, 20px);
+        pointer-events: all;
+        user-select: none;
+        transform-style: preserve-3d;
+        transform-origin: left center;
+        transition: transform 1s,
+          rotate 1s ease-in calc((min(var(--i), var(--c)) - max(var(--i), var(--c))) * 50ms);
+        translate: calc(var(--i) * -100%) 0px 0px;
+        transform: translateZ(calc((var(--c) - var(--i) - 0.5) * calc(var(--thickness) * 0.23cqmin)));
+        rotate: 0 1 0 calc(clamp(0, var(--c) - var(--i), 1) * -180deg);
+        box-shadow: 0em 0.5em 1.5em -0.2em rgba(0,0,0,0.3);
+      }
+      
+      .front, .back {
+        position: relative;
+        flex: none;
+        width: 100%;
+        backface-visibility: hidden;
+        overflow: hidden;
+        background-color: var(--color-off-white);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2.5em;
+        text-align: center;
+      }
 
-.back {
-  translate: -100% 0;
-  rotate: 0 1 0 180deg;
-}
+      .back {
+        translate: -100% 0;
+        rotate: 0 1 0 180deg;
+      }
+      
+      /* Page Numbering */
+      .book { counter-reset: page -1; }
+      .front::after, .back::after {
+        position: absolute;
+        bottom: 1em;
+        counter-increment: page;
+        content: counter(page);
+        font-size: 0.9em;
+        font-family: var(--font-heading);
+        color: #ccc;
+      }
+      .front::after { right: 1em; }
+      .back::after { left: 1em; }
+      .cover::after { content: ""; }
+      
+      /* Page Backgrounds */
+      .front {
+        background: linear-gradient(to left, #f7f7f7 80%, #eee 100%);
+        border-radius: 0.1em 0.5em 0.5em 0.1em;
+      }
+      .back {
+        background-image: linear-gradient(to right, #f7f7f7 80%, #eee 100%);
+        border-radius: 0.5em 0.1em 0.1em 0.5em;
+      }
+      
+      /* Image Pages */
+      .front:has(img), .back:has(img) { padding: 0; }
+      .front img, .back img { width: 100%; height: 100%; object-fit: cover; }
 
-.book {
-  counter-reset: page -1;
-}
+      /* ===== Cover Design ===== */
+      .cover {
+        background: linear-gradient(135deg, var(--color-heart), var(--color-text-pink));
+        color: var(--color-white);
+        border: 2px solid rgba(255,255,255,0.5);
+      }
+      .cover h1 {
+          font-family: var(--font-title);
+          font-size: 3.5em;
+          text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+      }
+      .cover p {
+        font-family: var(--font-heading);
+        font-size: 1.2em;
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+      }
 
-.book a {
-  color: inherit;
-}
+      /* Typography Inside Book */
+      h2 {
+        font-family: var(--font-heading);
+        font-size: 2em;
+        color: var(--color-text-pink);
+        margin-bottom: 0.5em;
+      }
 
-.page {
-  box-shadow: 0em 0.5em 1em -0.2em #00000020;
-}
+      p {
+        font-family: var(--font-handwriting);
+        font-size: 1.8em;
+        margin-bottom: 0.8em;
+        line-height: 1.4;
+        color: var(--color-black);
+      }
+      p:last-child { margin-bottom: 0; }
+      b { font-family: var(--font-heading); font-weight: bold; }
 
-.front,
-.back {
-  display: flex;
-  flex-flow: column wrap;
-  justify-content: space-between;
-  padding: 2em;
-  border: 1px solid #0002;
-}
-
-.front:has(img),
-.back:has(img) {
-  padding: 0;
-}
-
-.front img,
-.back img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.front::after,
-.back::after {
-  position: absolute;
-  bottom: 1em;
-  counter-increment: page;
-  content: counter(page) ".";
-  font-size: 0.8em;
-}
-
-.cover::after {
-  content: "";
-}
-
-.front::after {
-  right: 1em;
-}
-
-.front {
-  background: linear-gradient(to left, #f7f7f7 80%, #eee 100%);
-  border-radius: 0.1em 0.5em 0.5em 0.1em;
-}
-
-.back::after {
-  left: 1em;
-}
-
-.back {
-  background-image: linear-gradient(to right, #f7f7f7 80%, #eee 100%);
-  border-radius: 0.5em 0.1em 0.1em 0.5em;
-}
-
-.cover {
-  background: radial-gradient(
-          circle farthest-corner at 80% 20%,
-          hsl(150 80% 20% / 0.3) 0%,
-          hsl(170 60% 10% / 0.1) 100%
-      ),
-      hsl(231, 32%, 29%) url("./cover.jpg") 50% / cover;
-  color: hsl(0, 100%, 30%); /* Dark red text color for cover page */
-}
-
-h1,
-h2,
-h3 {
-  margin-bottom: 1px;
-  color: hsl(0, 100%, 30%); /* Dark red heading color */
-}
-
-p {
-  margin-top: 1px;
-  margin-bottom: 8px;
-  line-height: 1.4;
-  color: hsl(0, 100%, 30%); /* Dark red text color for paragraphs */
-}
-
-.front,
-.back {
-  padding: 1.5em;
-  color: hsl(0, 100%, 30%); /* Dark red text color for front and back pages */
-}
-
-.book {
-  width: 40cqmin; /* Slightly increased width */
-}
-
-.page {
-  font-size: 2cqmin; /* Slightly increased font size */
-}
-
-p:last-child {
-  margin-bottom: 0;
-}
-
-.front,
-.back {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 1.5em;
-}
-
-h2 {
-  margin-bottom: 5px;
-}
-
-p {
-  margin-top: 5px;
-  line-height: 1.4;
-}
-
-
-body {
-  margin: 0;
-  display: flex;
-  min-height: 100dvh;
-  perspective: 1000px;
-  font: 1em/1.4 "Poppins", sans-serif;
-  overflow: hidden;
-  color: hsl(180 68% 5%);
-  background: linear-gradient(to right, #ff7eb9, #ff65a3, #ff165d);
-  background-size: 400% 400%;
-  animation: gradientAnimation 10s ease infinite;
-}
-
-@keyframes gradientAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Emoji Animation */
-.emoji {
-  position: absolute;
-  font-size: 3rem;
-  opacity: 0;
-  animation: floatEmojis 6s ease-in-out infinite;
-}
-
-@keyframes floatEmojis {
-  0% {
-    transform: translateY(100px);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(-100px) rotate(20deg);
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(100px);
-    opacity: 1;
-  }
-}
-
-/* Add random timing for each emoji */
-.emoji:nth-child(1) {
-  animation-delay: 0s;
-  left: 10%;
-}
-.emoji:nth-child(2) {
-  animation-delay: 1s;
-  left: 20%;
-}
-.emoji:nth-child(3) {
-  animation-delay: 2s;
-  left: 30%;
-}
-.emoji:nth-child(4) {
-  animation-delay: 3s;
-  left: 40%;
-}
-.emoji:nth-child(5) {
-  animation-delay: 4s;
-  left: 50%;
-}
-.emoji:nth-child(6) {
-  animation-delay: 5s;
-  left: 60%;
-}
-.emoji:nth-child(7) {
-  animation-delay: 6s;
-  left: 70%;
-}
-.emoji:nth-child(8) {
-  animation-delay: 7s;
-  left: 80%;
-}
-.emoji:nth-child(9) {
-  animation-delay: 8s;
-  left: 90%;
-}
-
-
-     </style>
+      /* Floating Hearts Animation */
+      .floating-hearts {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: -1;
+      }
+      @keyframes float {
+        0% { transform: translateY(0); opacity: 0; }
+        10% { opacity: 0.8; }
+        100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+      }
+      .floating-hearts i {
+        position: absolute;
+        bottom: -80px;
+        color: var(--color-heart);
+        animation: float linear infinite;
+      }
+    </style>
   </head>
   <body>
+    <div class="floating-hearts"></div>
+
     <div class="book">
       <div class="page">
         <div class="front cover">
-          <h1
-            style="
-              color: rgb(255, 255, 255);
-              text-shadow: 5px 2px 5px rgb(0, 0, 0);
-            "
-          >
-            A Message for You🤍
-          </h1>
-
-          <p
-            style="
-              color: rgb(255, 255, 255);
-              text-shadow: 5px 2px 5px rgb(0, 0, 0);
-            "
-          >
-          Anshini Special Edition :)
-          </p>
-        </div>
-        
-          
-          <div class="back">
-            <img src="./1.jpg" alt="Img 1" />
-          </div>
-
-         
-        
-      </div>
-      <!--2nd page-->
-      <div class="page">
-        <div class="front">
-          <h2>Brown Eyes Beauty ❤️✨</h2>
-          <p>I just want to say—your eyes are unbelievably pretty! 😍</p>
-          <p>Actually, a black hole has the second strongest gravitational pull in the universe ☠️... But the first? Still your eyes 👀😭🥹🤌</p>
-          <p>And here’s a shayari just for you—</p>
-          <p><b>Teri bhuri aankhon👁️👁️ mein ek duniya🌍 basi hai,</b> <br>  
-            <b>Jahan sapne sajte hain, khushiyaan😊 hansi hai.❤️‍🔥</b> <br>  
-            <b>Inki chamak✨ se roshan hota har jahaan☺️,</b> <br>  
-            <b>Jaise subah ki roshni le aaye naya samaa✨.</b> <br><br></p>
-
+          <h1>Happy Birthday!</h1>
+          <p>A Special Book Just For You ❤️</p>
         </div>
         <div class="back">
-          <img src="./2.jpg" alt="Img 1" />
+          <img src="./1.jpg" alt="A beautiful memory" />
         </div>
       </div>
-      <!--3rd page-->
+      
       <div class="page">
         <div class="front">
-          <h2>You are so beautiful 🥹🫶🏻💖</h2>
-        
-
-          <p>Honestly, you’re always beautiful ✌️, but when you wear traditional outfits like kurti, lehenga, saree with jhumkas… <b>hayee 😳</b>, you look next-level gorgeous! ❤️‍🔥</p>  
-          
-          <p>Sach mein, you look like an <b>apsara</b> when you wear traditional! ✨</p>  
-          
-          <p>And here’s a shayari just for you—</p>  
-          
-          <p>  
-            <b>Teri khoobsurti ek naghma, ek pyara sa geet, 🎵</b> <br>  
-            <b>Tu hi hai meri duniya, tu hi mera meet. 💕</b> <br>  
-            <b>Tere chehre ki chamak, jaise subah ki roshni, 🌅</b> <br>  
-            <b>Tere saath har pal lage, ek madhur preet. 💞</b>  
-          </p>  
-          
-        
-        </div>
-       
-        <div class="back">
-          <h2>The Year I Met You🥹</h2><br>
-          <p>By the way, it's 2025 now. But I just want to tell you 😭🫶🏻<3</p><br>
-          <p>2024 wasn’t my best year 🙂, but at least I met you ❤️‍🩹🫶🏻</p>
-          <p>—and that made this year so special for me 🥹🤌.</p>
-          <p>And I just want you to know, you are so special to me.😭🫶🏻</p><br>
-          
-          
-        </div>
-      </div>
-      <!--4th page-->
-      <div class="page">
-        <div class="front">
-<img src="3.jpg" alt="">
-        </div>
-
-
-
-        <div class="back">
-          <img src="./4.png" alt="Img 1" />
-        </div>
-      </div>
-
-
-
-
-      <!--5th page-->
-      <div class="page">
-        <div class="front">
-          <h1>From the Depths of My Heart, A Wish Just for You 💖</h1>
-          
-          <br><p>I really love your reels!</p>
-          <p>Keep posting them regularly</p>
-          <p>and I hope you grow a lot on social media</p>
-          <p>Trust me, I’ll always be here, supporting you and cheering you on.</p>
-          <p>No matter what, I’m always here for you 😌🥹🤌</p>
-          <center>
-            <p>U<3</p>
-          </center>
-
-        </div>
-
-        <div class="back">        
-<img src="5.jpg" alt="">
-        </div>
-      </div>
-
-
-      <!--6th page-->
-      <div class="page">
-        <div class="front">
-          <h2>End of the Book✨💖</h2>
-         <p>I wish I could write so much more :)</p>
-         <p> but honestly, I could fill infinite pages just talking about you.</p>
-         <p>So, let’s stop here.🛑</p>
-         <p>I truly hope you like this book I’ve written for you.🥹😭</p>
-         <p>And always remember, you’re incredibly special to me.🥹🫶🏻</p>
+          <h2>To The Birthday Girl ✨</h2>
+          <p>This book is a small collection of all the wonderful things that make you so special. I hope it makes your day even brighter!</p>
+          <p>Wishing you the happiest of birthdays, filled with love, joy, and everything you've ever wished for.</p>
         </div>
         <div class="back">
-          <img src="6.jpg" alt="">
+          <img src="./2.jpg" alt="A beautiful memory" />
         </div>
       </div>
-      <!--7th page-->
+      
       <div class="page">
         <div class="front">
-         <h2>Goodbye for now :)</h2>
-         <b><p>but you’ll always be in my heart. <3</p></b>
+          <h2>You're So Beautiful 💖</h2>
+          <p>Honestly, you have a beauty that shines from the inside out. It's in your smile, your eyes, and the kindness you show to everyone.</p>
+          <p><b>Your beauty isn't just in how you look, but in who you are.</b></p>
         </div>
         <div class="back">
-         <img src="7.png" alt="">
+            <img src="./3.jpg" alt="A beautiful memory" />
         </div>
       </div>
+      
+      <div class="page">
+        <div class="front">
+          <img src="./4.png" alt="A beautiful memory" />
+        </div>
+        <div class="back">
+          <h2>A Heart of Gold 💛</h2>
+          <p>You have one of the kindest hearts I've ever known. The way you care for others is truly inspiring.</p>
+          <p>The world is a much better place because you are in it, spreading your warmth and light.</p>
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="front">
+          <h2>A Wish For You...</h2>
+          <p>For your birthday, I wish you endless happiness, new adventures, and success in everything you do.</p>
+          <p>May your dreams take flight and your journey be filled with wonderful moments.</p>
+          <p><b>Always keep shining!</b></p>
+        </div>
+        <div class="back">
+          <img src="./5.jpg" alt="A beautiful memory" />
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="front">
+            <img src="./6.jpg" alt="A beautiful memory" />
+        </div>
+        <div class="back">
+          <h2>Endless Smiles 😊</h2>
+          <p>I hope your day is as amazing as your smile.</p>
+          <p>May you always have a reason to laugh and share that incredible joy with the world. Happy Birthday!</p>
+        </div>
+      </div>
+      
+      <div class="page">
+        <div class="front">
+          <img src="./7.png" alt="A beautiful memory" />
+        </div>
+        <div class="back cover">
+          <h1>The End</h1>
+          <p>...but a new beginning.</p>
+        </div>
       </div>
     </div>
 
+    <script>
+      // Function to initialize the flipbook
+      const flipBook = (elBook) => {
+        elBook.style.setProperty("--c", 0); // Set current page to 0 (cover)
+        elBook.querySelectorAll(".page").forEach((page, idx) => {
+          page.style.setProperty("--i", idx);
+          page.addEventListener("click", (evt) => {
+            if (evt.target.closest("a")) return;
+            const curr = evt.target.closest(".back") ? idx : idx + 1;
+            elBook.style.setProperty("--c", curr);
+          });
+        });
+      };
+      
+      // Initialize all books on the page
+      document.querySelectorAll(".book").forEach(flipBook);
 
-    <div class="emoji">❤️‍🔥</div>
-<div class="emoji">🫶🏻</div>
-<div class="emoji">❤️</div>
-<div class="emoji">😘</div>
-<div class="emoji">👨‍❤️‍💋‍👨</div>
-<div class="emoji">💓</div>
-<div class="emoji">❣️</div>
-<div class="emoji">💘</div>
-<div class="emoji">💖</div>
-<div class="emoji">💙</div>
-<div class="emoji">💚</div>
-<div class="emoji">🥰</div>
-<div class="emoji">💗</div>
-
-<script>
-  const flipBook = (elBook) => {
-    elBook.style.setProperty("--c", 0); // Set current page
-    elBook.querySelectorAll(".page").forEach((page, idx) => {
-      page.style.setProperty("--i", idx);
-      page.addEventListener("click", (evt) => {
-        if (evt.target.closest("a")) return;
-        const curr = evt.target.closest(".back") ? idx : idx + 1;
-        elBook.style.setProperty("--c", curr);
-      });
-    });
-  };
-  
-  document.querySelectorAll(".book").forEach(flipBook);
-  
-</script>
- 
+      // --- Generate Floating Hearts ---
+      const createFloatingHearts = (container, count) => {
+          for (let i = 0; i < count; i++) {
+              const heart = document.createElement('i');
+              heart.className = 'fa-solid fa-heart';
+              heart.style.left = `${Math.random() * 100}%`;
+              heart.style.animationDelay = `${Math.random() * 10}s`;
+              heart.style.fontSize = `${15 + Math.random() * 20}px`;
+              heart.style.animationDuration = `${10 + Math.random() * 15}s`;
+              container.appendChild(heart);
+          }
+      };
+      createFloatingHearts(document.querySelector('.floating-hearts'), 30);
+    </script>
   </body>
 </html>
-
